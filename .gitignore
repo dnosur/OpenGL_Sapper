@@ -31,4 +31,8 @@
 *.out
 *.app
 
+*.vsidx
+*.ipch
+
 x64
+v17
