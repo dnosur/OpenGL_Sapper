@@ -1,10 +1,11 @@
 #include "Mouse.h"
-#include <vector>
 #include "Window.h"
+
+#include <vector>
 
 __interface IFigure;
 
-typedef void(__stdcall* MouseHoverHandler)(IFigure* figure);
+typedef void(__stdcall* MouseHoverHandler)(IFigure* figure, GLFWwindow* window);
 typedef void(__stdcall* MouseClickHandler)(IFigure* figure, GLFWwindow* window);
 
 __interface IFigure
@@ -25,6 +26,8 @@ __interface IFigure
 	Size GetSize();
 
 	const char* GetTitle();
+
+	const bool IsMouseOverlap();
 
 	void HookMouseHover(MouseHoverHandler handler);
 	void HookMouseOver(MouseHoverHandler handler);
