@@ -9,6 +9,8 @@ void Window::MakeWindow()
     }
 
     mouse = Mouse(window);
+    keyboard = Keyboard(window);
+
     closed = false;
 }
 
@@ -66,6 +68,10 @@ Size Window::GetSize()
 char* Window::GetTitle()
 {
     return title;
+}
+
+void Window::Initialize()
+{
 }
 
 void Window::Update()
@@ -128,9 +134,24 @@ Color Window::GetBackgroundColor()
     return backgroundColor;
 }
 
+ImagesController& Window::GetImagesController()
+{
+    return images;
+}
+
 Mouse& Window::GetMouse()
 {
     return mouse;
+}
+
+Keyboard& Window::GetKeyboard()
+{
+    return keyboard;
+}
+
+Timer Window::GetTimer()
+{
+    return timer;
 }
 
 void Window::Debug(bool norm)

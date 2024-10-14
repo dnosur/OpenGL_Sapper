@@ -1,10 +1,11 @@
 #pragma once
-#include <GLFW/glfw3.h>
-#include <iostream>
+#include "ImagesController.h"
 
 #include "Size.h"
 #include "Mouse.h"
 #include "Color.h"
+#include "Keyboard.h"
+#include "Timer.h"
 
 class Window
 {
@@ -13,7 +14,13 @@ protected:
 	GLFWmonitor* monitor;
 	GLFWwindow* share;
 
+	ImagesController images;
+
 	Mouse mouse;
+	Keyboard keyboard;
+
+	Timer timer;
+
 	Size size;
 
 	Color backgroundColor;
@@ -36,6 +43,7 @@ public:
 	Size GetSize();
 	char* GetTitle();
 
+	virtual void Initialize();
 	virtual void Update();
 
 	void MakeContext();
@@ -52,7 +60,12 @@ public:
 	void SetBackgroundColor(Color color);
 	Color GetBackgroundColor();
 
+	ImagesController& GetImagesController();
+
 	Mouse& GetMouse();
+	Keyboard& GetKeyboard();
+
+	Timer GetTimer();
 
 	void Debug(bool norm = false);
 };
