@@ -6,18 +6,18 @@ struct WindowPointer
 {
 private:
 	char* title;
-	T value;
+	T* value;
 	bool undefined;
 
 public:
 
 	WindowPointer();
-	WindowPointer(const char* title, T value);
+	WindowPointer(const char* title, T* value);
 
 	const char* GetTitle();
 
-	void SetValue(T value);
-	T GetValue();
+	void SetValue(T* value);
+	T& GetValue();
 
 	const bool IsUndefined();
 
@@ -34,7 +34,7 @@ inline WindowPointer<T>::WindowPointer()
 }
 
 template<typename T>
-inline WindowPointer<T>::WindowPointer(const char* title, T value)
+inline WindowPointer<T>::WindowPointer(const char* title, T* value)
 {
 	this->title = new char[strlen(title) + 1];
 	strcpy_s(this->title, strlen(title) + 1, title);
@@ -50,15 +50,15 @@ inline const char* WindowPointer<T>::GetTitle()
 }
 
 template<typename T>
-inline void WindowPointer<T>::SetValue(T value)
+inline void WindowPointer<T>::SetValue(T* value)
 {
 	this->value = value;
 }
 
 template<typename T>
-inline T WindowPointer<T>::GetValue()
+inline T& WindowPointer<T>::GetValue()
 {
-	return value;
+	return *value;
 }
 
 template<typename T>
