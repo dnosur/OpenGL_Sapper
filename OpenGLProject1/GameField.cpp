@@ -1,9 +1,9 @@
 #include "GameField.h"
+#include "WindowPointerController.h"
 
 void GameField::GenerateField()
 {
 	field = new std::pair<Rect, Cell<char>>*[row];
-
 
 	for (int i = 0; i < row; i++) {
 		field[i] = new std::pair<Rect, Cell<char>>[col];
@@ -14,26 +14,47 @@ void GameField::GenerateField()
 				Cell<char>(Coord(j, i), '.')
 			};
 
-			field[i][j].first.HookMouseHover([](IFigure* figure) {
+			WindowPointerController::SetPointer(window->GetWindow(), WindowPointer<Cell<char>>(title.c_str(), &field[i][j].second));
+
+			field[i][j].first.HookMouseHover([](IFigure* figure, GLFWwindow* window) {
+				WindowPointer<Cell<char>>* cell = WindowPointerController::GetValue<Cell<char>>(window, figure->GetTitle());
+				if (cell->GetValue().revealed && cell->GetValue().value == '*') {
+					figure->SetColor(Color(1, 0, 0, 0));
+					return;
+				}
+
 				figure->SetColor(Color(0, 1, 0, 0));
 				//std::cout << figure->GetTitle() << " Mouse Hover!\n";
 			});
 
-			field[i][j].first.HookMouseOver([](IFigure* figure) {
+			field[i][j].first.HookMouseOver([](IFigure* figure, GLFWwindow* window) {
+				WindowPointer<Cell<char>>* cell = WindowPointerController::GetValue<Cell<char>>(window, figure->GetTitle());
+				if (cell->GetValue().revealed && cell->GetValue().value == '*') {
+					figure->SetColor(Color(1, 0, 0, 0));
+					return;
+				}
+
 				figure->SetColor(figure->GetBaseColor());
 				//std::cout << figure->GetTitle() << " Mouse Over!\n";
 			});
 
 			field[i][j].first.HookMouseClick([](IFigure* figure, GLFWwindow* window) {
-				std::pair<Rect, Cell<char>>** field = static_cast<std::pair<Rect, Cell<char>>**>(glfwGetWindowUserPointer(window));
-				auto first = field[0][0];
-				std::cout << figure->GetTitle() << " Click!\n";
+				WindowPointer<Cell<char>>* cell = WindowPointerController::GetValue<Cell<char>>(window, figure->GetTitle());
+				if (cell->GetValue().revealed) {
+					return;
+				}
+
+				std::cout << figure->GetTitle() << " X: " << cell->GetValue().coord.X << " Y: " << cell->GetValue().coord.Y << " Value: " << cell->GetValue().value << "\n";
+				
+				if (cell->GetValue().value == '*') {
+					figure->SetColor(Color(1, 0, 0, 0));
+					return;
+				}
+				figure->SetColor(EmptyColor);
 			});
 		}
 	}
 
-	glfwSetWindowUserPointer(window->GetWindow(), &field);
-	std::pair<Rect, Cell<char>>** field = static_cast<std::pair<Rect, Cell<char>>**>(glfwGetWindowUserPointer(window->GetWindow()));
 
 	std::cout << std::endl;
 
@@ -85,9 +106,53 @@ void GameField::GenerateField()
 	}
 }
 
+void GameField::RevealCell(std::pair<Rect, Cell<char>>& cell)
+{
+	if (cell.second.coord.X < 0 || cell.second.coord.X >= col ||
+		cell.second.coord.Y < 0 || cell.second.coord.Y >= row ||
+		cell.second.revealed) {
+		return;
+	}
+
+	cell.second.revealed = true;
+
+	if (cell.second.value != '.' && cell.second.value != '0')
+	{
+		return;
+	}
+
+	for (int dx = -1; dx <= 1; dx++)
+	{
+		for (int dy = -1; dy <= 1; dy++)
+		{
+			if (bool(dx != 0 || dy != 0) &&
+				cell.second.coord.X + dy < col && cell.second.coord.Y + dy < row && 
+				cell.second.coord.X + dy < col >= 0 && cell.second.coord.Y + dy >= 0
+			)
+			{
+				RevealCell(GetPairByCoord(cell.second.coord.X + dx, cell.second.coord.Y + dy));
+			}
+		}
+	}
+}
+
 std::pair<Rect, Cell<char>>& GameField::GetPairByCoord(int x, int y)
 {
 	return field[y][x];
+}
+
+void GameField::CheckWin()
+{
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			if (!field[i][j].second.revealed && field[i][j].second.value != '*') {
+				win = false;
+				return;
+			}
+		}
+	}
+	win = true;
+	gameOver = true;
 }
 
 GameField::GameField()
@@ -97,6 +162,9 @@ GameField::GameField()
 	this->mines = MINES_DEFAULT;
 
 	window = NULL;
+
+	field = nullptr;
+	gameOver = win = false;
 }
 
 GameField::GameField(Window& window, int row, int col, int mines)
@@ -112,14 +180,146 @@ GameField::GameField(Window& window, int row, int col, int mines)
 
 void GameField::Draw()
 {
+	KeyboardKey keyboardKey = window->GetKeyboard().GetKey();
+
+	if (IsOver()) {
+		char* str = (char*)(win ? "Win! :)" : "Lose :(");
+		DrawSymbols(
+			Coord(800, 100), 
+			str, 
+			window->GetSize(), 
+			win 
+				? Color(0, 1, 0) 
+				: Color(1, 0, 0)
+		);
+	}
+
+
 	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < col; j++)
 		{
 			std::pair<Rect, Cell<char>>& element = GetPairByCoord(j, i);
+
+			bool revealed = element.second.revealed;
+			bool isMouseOverlap = element.first.IsMouseOverlap();
+
 			element.first.MouseHover(window->GetMouse());
-			element.first.MouseClick(window->GetMouse());
+
+			//Установка флага
+			if (isMouseOverlap && !revealed && keyboardKey.pressed && keyboardKey.key == GLFW_KEY_F) {
+				element.second.marker = !element.second.marker;
+			}
+
+			//Клик по ячейке
+			if (!gameOver && element.first.MouseClick(window->GetMouse())) {
+				RevealCell(element);
+				CheckWin();
+				revealed = true;
+			};
+
+			if (revealed) {
+				const int newX = element.first.GetPos().X - 18;
+				const int newY = element.first.GetPos().Y - 20;
+
+				//Нажали на мину
+				if (element.second.value == '*') {
+					win = false;
+					gameOver = true;
+					window->GetImagesController().DrawImage(
+						"mine", 
+						Coord(newX, newY), 
+						Size(35, 35), 
+						window->GetSize(), 
+						Color(1, 0, 0)
+					);
+					continue;
+				}
+
+				if (element.second.value == '.') {
+					window->GetImagesController().DrawImage(
+						"hole", 
+						Coord(newX, newY),
+						Size(35, 35),
+						window->GetSize()
+					);
+					continue;
+				}
+
+				DrawSymbol(
+					Coord(
+						element.first.GetPos().X - 3,
+						element.first.GetPos().Y
+					),
+					element.second.value,
+					window->GetSize(),
+					Color(222, 90, 119).ConvertToGl()
+				);
+				continue;
+			}
+
+			//Вывод открытых ячеек
+			if (gameOver) {
+				const int newX = element.first.GetPos().X - 18;
+				const int newY = element.first.GetPos().Y - 20;
+
+				if (element.second.value == '*') {
+					window->GetImagesController().DrawImage(
+						"mine", 
+						Coord(newX, newY), 
+						Size(35, 35),
+						window->GetSize()
+					);
+					continue;
+				}
+
+				if (element.second.value == '.') {
+					window->GetImagesController().DrawImage(
+						"hole", 
+						Coord(newX, newY), 
+						Size(35, 35), 
+						window->GetSize(),
+						Color(0.8f, 0.3f, 0.1f)
+					);
+					continue;
+				}
+
+				DrawSymbol(
+					Coord(
+						element.first.GetPos().X - 3, 
+						element.first.GetPos().Y
+					), 
+					element.second.value, 
+					window->GetSize(),
+					Color(217, 219, 65).ConvertToGl()
+				);
+				continue;
+			}
+
 			element.first.Draw();
+
+			if (element.second.marker) {
+				const int newX = element.first.GetPos().X - 15;
+				const int newY = element.first.GetPos().Y - 40;
+
+				window->GetImagesController().DrawImage(
+					"redFlag", 
+					Coord(newX, newY), 
+					Size(50, 50),
+					window->GetSize()
+				);
+				continue;
+			}
 		}
 	}
+}
+
+bool GameField::IsOver()
+{
+	return gameOver;
+}
+
+bool GameField::IsWin()
+{
+	return win;
 }
