@@ -17,17 +17,29 @@ Mouse::Mouse(GLFWwindow* window)
 	curr = Coord(mouseX, mouseY);
 	click = false;
 
-	glfwSetWindowUserPointer(this->window, this);
-	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
-		Mouse* mouse = static_cast<Mouse*>(glfwGetWindowUserPointer(window));
+	HookMouseHandler([](GLFWwindow* window, int button, int action, int mods) {
+		WindowPointer<Mouse>* mouse = WindowPointerController::GetValue<Mouse>(window, "Mouse");
 		if (mouse == nullptr) {
 			return;
 		}
 
 		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-			mouse->click = true;
+			mouse->GetValue().Click();
 		}
 	});
+}
+
+Mouse::Mouse(GLFWwindow* window, GLFWmousebuttonfun handler)
+{
+	this->window = window;
+	double mouseX, mouseY;
+	glfwGetCursorPos(window, &mouseX, &mouseY);
+
+	prev = Coord(mouseX, mouseY);
+	curr = Coord(mouseX, mouseY);
+	click = false;
+
+	HookMouseHandler(handler);
 }
 
 void Mouse::Update()
@@ -54,9 +66,19 @@ Coord Mouse::GetPrevMouseCoord()
 	return prev;
 }
 
+void Mouse::HookMouseHandler(GLFWmousebuttonfun handler)
+{
+	glfwSetMouseButtonCallback(window, handler);
+}
+
 bool Mouse::isClick()
 {
 	return click;
+}
+
+void Mouse::Click()
+{
+	click = true;
 }
 
 bool Mouse::IsEqual()
