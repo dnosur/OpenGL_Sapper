@@ -7,6 +7,8 @@ struct Color
 	Color();
 	Color(float r, float g, float b, float a = 0);
 
+	Color ConvertToGl();
+
 	bool operator==(const Color& other) const;
 	bool operator!=(const Color& other) const;
 

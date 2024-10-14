@@ -13,6 +13,11 @@ Color::Color(float r, float g, float b, float a)
 	this->a = a;
 }
 
+Color Color::ConvertToGl()
+{
+	return Color(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+}
+
 bool Color::operator==(const Color& other) const
 {
 	return other.r == r && other.g == g && 
