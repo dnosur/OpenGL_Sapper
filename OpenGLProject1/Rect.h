@@ -47,6 +47,8 @@ public:
 
     const char* GetTitle();
 
+    const bool IsMouseOverlap();
+
     void HookMouseHover(MouseHoverHandler handler);
     void HookMouseOver(MouseHoverHandler handler);
 

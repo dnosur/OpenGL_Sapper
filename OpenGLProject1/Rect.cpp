@@ -70,6 +70,7 @@ Rect::Rect(const char* title, Window& window, Coord vertex1, Coord vertex2, Colo
 
 void Rect::Draw()
 {
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
     glBegin(GL_QUADS);
     glColor3f(color.r, color.g, color.b);
     glVertex2f(vertex1.X, vertex1.Y);
@@ -77,6 +78,7 @@ void Rect::Draw()
     glVertex2f(vertex2.X, vertex2.Y);
     glVertex2f(vertex1.X, vertex2.Y);
     glEnd();
+    glPopAttrib();
 }
 
 Coord Rect::GetPos()
@@ -98,11 +100,11 @@ bool Rect::MouseHover(Mouse& mouse)
     const bool isHover = MouseInRect(mouse);
 
     if (isHover && OnMouseHover) {
-        OnMouseHover(this);
+        OnMouseHover(this, window->GetWindow());
     }
 
     if (!isHover && OnMouseOver) {
-        OnMouseOver(this);
+        OnMouseOver(this, window->GetWindow());
     }
 
     return isHover;
@@ -146,6 +148,11 @@ std::vector<Coord> Rect::GetVertices()
 const char* Rect::GetTitle()
 {
     return title;
+}
+
+const bool Rect::IsMouseOverlap()
+{
+    return MouseInRect(window->GetMouse());
 }
 
 void Rect::HookMouseHover(MouseHoverHandler handler)
