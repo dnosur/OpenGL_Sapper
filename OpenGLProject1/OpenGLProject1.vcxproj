@@ -104,13 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Programming\C++\OpenGLProject1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Programming\C++\OpenGLProject1\include;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;D:\Programming\C++\OpenGLProject1\vcpkg_installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Programming\C++\OpenGLProject1\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Programming\C++\OpenGLProject1\lib-vc2022;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win64;D:\Programming\C++\OpenGLProject1\vcpkg_installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;freeglut.lib;OpenAL32.lib;sndfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "D:\VisualStudio\ide\VC\Auxiliary\VS\bin\x64" "$(OutDir)"</Command>
@@ -133,9 +134,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Coord.cpp" />
     <ClCompile Include="Figures.cpp" />
+    <ClCompile Include="FrameSound.cpp" />
+    <ClCompile Include="FrameSoundsController.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="GameField.cpp" />
     <ClCompile Include="IFigure.h" />
@@ -148,14 +152,20 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Size.cpp" />
+    <ClCompile Include="AudioController.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
+    <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Coord.h" />
     <ClInclude Include="Figures.h" />
+    <ClInclude Include="FrameSound.h" />
+    <ClInclude Include="FrameSoundsController.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="GameField.h" />
     <ClInclude Include="Image.h" />
@@ -166,11 +176,17 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Size.h" />
+    <ClInclude Include="AudioController.h" />
+    <ClInclude Include="SoundSystem.h" />
+    <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowPointer.h" />
     <ClInclude Include="WindowPointerController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\vcpkg.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
