@@ -25,4 +25,11 @@ public:
 	void DrawImage(const char* title, Coord position, Size size, Size windowSize, Color color = Color(1.0f, 1.0f, 1.0f));
 
 	Image GetImageByTitle(const char* title);
+
+	std::vector<Image> GetImages();
+	void SetImages(std::vector<Image> images);
+
+	int GetSize();
+
+	void Clear();
 };

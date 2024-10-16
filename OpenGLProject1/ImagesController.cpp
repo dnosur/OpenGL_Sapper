@@ -126,7 +126,7 @@ void ImagesController::DrawImage(const char* title, Coord position, Size size, S
     const int index = GetIndexByTitle((char*)title);
     const GLuint image = images[index].image;
 
-    glColor3f(color.r, color.g, color.b);
+    glColor4f(color.r, color.g, color.b, color.a);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, image);
@@ -153,7 +153,6 @@ void ImagesController::DrawImage(const char* title, Coord position, Size size, S
     glMatrixMode(GL_MODELVIEW);
 
     glDisable(GL_TEXTURE_2D);
-
 }
 
 Image ImagesController::GetImageByTitle(const char* title)
@@ -163,4 +162,30 @@ Image ImagesController::GetImageByTitle(const char* title)
         return Image();
     }
     return images[index];
+}
+
+std::vector<Image> ImagesController::GetImages()
+{
+    return images;
+}
+
+void ImagesController::SetImages(std::vector<Image> images)
+{
+    Clear();
+    for (const Image& image : images) {
+        this->images.push_back(image);
+    }
+}
+
+int ImagesController::GetSize()
+{
+    return images.size();
+}
+
+void ImagesController::Clear()
+{
+    if (!images.size()) {
+        return;
+    }
+    images.clear();
 }
