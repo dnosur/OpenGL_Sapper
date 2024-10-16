@@ -20,8 +20,7 @@ Rect::Rect()
 
 Rect::Rect(const char* title, Window& window, Coord pos, Size size, Color color)
 {
-    this->title = new char[strlen(title) + 1];
-    strcpy_s(this->title, strlen(title) + 1, title);
+    copyStr(title, this->title);
 
     this->window = &window;
     this->pos = pos;
@@ -48,8 +47,7 @@ Rect::Rect(const char* title, Window& window, Coord pos, Size size, Color color)
 
 Rect::Rect(const char* title, Window& window, Coord vertex1, Coord vertex2, Color color)
 {
-    this->title = new char[strlen(title) + 1];
-    strcpy_s(this->title, strlen(title) + 1, title);
+    copyStr(title, this->title);
 
     this->window = &window;
 	this->vertex1 = vertex1;
@@ -190,8 +188,7 @@ Rect& Rect::operator=(const Rect& other)
     this->OnMouseHover = other.OnMouseHover;
     this->OnMouseOver = other.OnMouseOver;
 
-    this->title = new char[strlen(other.title) + 1];
-    strcpy_s(this->title, strlen(other.title) + 1, other.title);
+    copyStr(other.title, this->title);
 
     return *this;
 }
