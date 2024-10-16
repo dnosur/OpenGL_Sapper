@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "functions.h"
 
 template <typename T>
 struct WindowPointer
@@ -36,8 +37,7 @@ inline WindowPointer<T>::WindowPointer()
 template<typename T>
 inline WindowPointer<T>::WindowPointer(const char* title, T* value)
 {
-	this->title = new char[strlen(title) + 1];
-	strcpy_s(this->title, strlen(title) + 1, title);
+	copyStr(title, this->title);
 
 	this->value = value;
 	undefined = false;
@@ -85,7 +85,7 @@ inline WindowPointer<T>& WindowPointer<T>::operator=(const WindowPointer& other)
 	if (this != &other)
 	{
 		value = other.value;
-		title = other.title;
+		copyStr(other.title, this->title);
 		undefined = other.undefined;
 	}
 	return *this;
