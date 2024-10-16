@@ -68,6 +68,18 @@ void DrawSymbols(Coord coord, char* symbols, Size windowSize, const Color color)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void copyStr(char* origin, char*& destination)
+{
+	destination = new char[strlen(origin) + 1];
+	strcpy_s(destination, strlen(origin) + 1, origin);
+}
+
+void copyStr(const char* origin, char*& destination)
+{
+	destination = new char[strlen(origin) + 1];
+	strcpy_s(destination, strlen(origin) + 1, origin);
+}
+
 void getxy(int& x, int& y) {
 	CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
 	HANDLE hStd = GetStdHandle(STD_OUTPUT_HANDLE);
