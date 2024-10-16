@@ -1,11 +1,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <GLFW/glfw3.h>
-#include "Figures.h"
+#include <GL/glut.h>
 #include <iostream>
 
+#include "Figures.h"
 #include "MainWindow.h"
-#include <GL/glut.h>
+#include "SoundSystem.h"
 
 int main(int argc, char** argv)
 {
@@ -14,9 +15,7 @@ int main(int argc, char** argv)
     if (!glfwInit())
         return -1;
 
-    glRasterPos2f(1, 1);
-
-    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, '!');
+    SoundSystem soundSystem;
     MainWindow main(Size(1280, 720), "Sapper");
 
     main.MakeContext();
