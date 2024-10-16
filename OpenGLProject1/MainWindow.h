@@ -2,6 +2,8 @@
 #include "Window.h"
 #include "Rect.h"
 
+#include "Audio.h"
+
 class MainWindow :
     public Window
 {

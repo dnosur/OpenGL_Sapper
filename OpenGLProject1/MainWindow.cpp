@@ -12,29 +12,28 @@ MainWindow::MainWindow(Size size, const char* title, Color backgroundColor, GLFW
 
 void MainWindow::Initialize()
 {
-    WindowPointerController::SetPointer(window, WindowPointer<Mouse>("Mouse", &mouse));
-    WindowPointerController::SetPointer(window, WindowPointer<Keyboard>("Keyboard", &keyboard));
-
     images.Load("images/redFlag.png", "redFlag");
     images.Load("images/mine.png", "mine");
     images.Load("images/hole.png", "hole");
     images.Load("images/ground.png", "ground");
+    images.Load("images/fail.png", "fail");
+    images.Load("images/won.png", "won");
 
-    for (int i = 0; i < 81; i++) {
-        std::string path = "animations/explosion1/" + std::to_string(i) + ".png";
+    audioController.Load(Audio("diggin", "sounds/diggin.wav"));
+    audioController.Load(Audio("set_flag", "sounds/set_flag.wav"));
+    audioController.Load(Audio("reset_flag", "sounds/reset_flag.wav"));
+    audioController.Load(Audio("fail", "sounds/fail.wav"));
+    audioController.Load(Audio("won", "sounds/won.wav"));
 
-        images.Load(path.c_str(), std::to_string(i).c_str());
-    }
+    WindowPointerController::SetPointer(window, WindowPointer<Mouse>("Mouse", &mouse));
+    WindowPointerController::SetPointer(window, WindowPointer<Keyboard>("Keyboard", &keyboard));
+
+    WindowPointerController::SetPointer(window, WindowPointer<AudioController>("audioController", &audioController));
 }
 
 void MainWindow::Update()
 {
     GameField gameField(*this, 20, 20, 35);
-
-    std::vector<Image> animation;
-    for (int i = 0; i < 80; i++) {
-        animation.push_back(images.GetImageByTitle(std::to_string(i).c_str()));
-    }
 
     while (!glfwWindowShouldClose(GetWindow()) && !IsClosed())
     {
@@ -42,14 +41,14 @@ void MainWindow::Update()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
 
         images.DrawImage(
             "ground", 
             Coord(0, 0), 
             GetSize(), 
             GetSize(), 
-            Color(0.4f, 0.4f, 0.4f, 0.4f)
+            Color(0.4f, 0.4f, 0.4f)
         );
 
         //PlayExplosionAnimation(Coord(100, 100), animation, 10);
