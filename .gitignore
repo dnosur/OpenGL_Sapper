@@ -34,5 +34,7 @@
 *.vsidx
 *.ipch
 
+vcpkg_installed
+
 x64
 v17
