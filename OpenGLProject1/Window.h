@@ -1,5 +1,6 @@
 #pragma once
 #include "ImagesController.h"
+#include "AudioController.h"
 
 #include "Size.h"
 #include "Mouse.h"
@@ -15,6 +16,7 @@ protected:
 	GLFWwindow* share;
 
 	ImagesController images;
+	AudioController audioController;
 
 	Mouse mouse;
 	Keyboard keyboard;
@@ -65,7 +67,7 @@ public:
 	Mouse& GetMouse();
 	Keyboard& GetKeyboard();
 
-	Timer GetTimer();
+	Timer& GetTimer();
 
 	void Debug(bool norm = false);
 };

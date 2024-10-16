@@ -35,7 +35,7 @@ Window::Window()
 Window::Window(Size size, const char* title, Color backgroundColor, GLFWmonitor* monitor, GLFWwindow* share)
 {
     this->size = size;
-    this->title = (char*)title;
+    copyStr(title, this->title);
 
     this->share = share;
     this->monitor = monitor;
@@ -149,7 +149,7 @@ Keyboard& Window::GetKeyboard()
     return keyboard;
 }
 
-Timer Window::GetTimer()
+Timer& Window::GetTimer()
 {
     return timer;
 }
