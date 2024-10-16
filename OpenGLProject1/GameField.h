@@ -1,13 +1,15 @@
 #pragma once
+#include <GL/glut.h>
 #include <iostream>
 #include <string>
 
 #include "Rect.h"
 #include "Cell.h"
 
-#include "functions.h"
+#include "SpriteAnimation.h"
+#include "AudioController.h"
 
-#include <GL/glut.h>
+#include "functions.h"
 
 #define ROWS_DEFAULT 30;
 #define COLS_DEFAULT 30;
@@ -21,11 +23,15 @@ class GameField
 	Window* window;
 	std::pair<Rect, Cell<char>>** field;
 
+	SpriteAnimation explosion;
+
 	int row, col;
 	int mines;
 
 	bool gameOver;
 	bool win;
+
+	float alpha;
 
 	void GenerateField();
 	void RevealCell(std::pair<Rect, Cell<char>>& cell);
@@ -33,6 +39,10 @@ class GameField
 	std::pair<Rect, Cell<char>>& GetPairByCoord(int x, int y);
 
 	void CheckWin();
+
+	void End();
+
+	void Restart();
 public:
 	GameField();
 	GameField(Window& window, int row, int col, int mines);

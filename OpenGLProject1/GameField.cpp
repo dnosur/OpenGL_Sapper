@@ -3,6 +3,10 @@
 
 void GameField::GenerateField()
 {
+	if (field != nullptr) {
+		delete[] field;
+	};
+
 	field = new std::pair<Rect, Cell<char>>*[row];
 
 	for (int i = 0; i < row; i++) {
@@ -44,17 +48,22 @@ void GameField::GenerateField()
 					return;
 				}
 
+				WindowPointer<AudioController>* audioController = WindowPointerController::GetValue<AudioController>(window, "audioController");
 				std::cout << figure->GetTitle() << " X: " << cell->GetValue().coord.X << " Y: " << cell->GetValue().coord.Y << " Value: " << cell->GetValue().value << "\n";
-				
+			
+
 				if (cell->GetValue().value == '*') {
 					figure->SetColor(Color(1, 0, 0, 0));
+					audioController->GetValue().Play("fail");
 					return;
 				}
+
+				audioController->GetValue().Play("diggin");
+
 				figure->SetColor(EmptyColor);
 			});
 		}
 	}
-
 
 	std::cout << std::endl;
 
@@ -151,8 +160,51 @@ void GameField::CheckWin()
 			}
 		}
 	}
+	WindowPointer<AudioController>* audioController = WindowPointerController::GetValue<AudioController>(window->GetWindow(), "audioController");
+	audioController->GetValue().Play("won");
+
 	win = true;
 	gameOver = true;
+}
+
+void GameField::End()
+{
+	char* str = (char*)(win ? "Win! :)" : "Lose :(");
+	DrawSymbols(
+		Coord(800, 100),
+		str,
+		window->GetSize(),
+		win
+		? Color(0, 1, 0)
+		: Color(1, 0, 0)
+	);
+
+	DrawSymbols(
+		Coord(800, 200),
+		(char*)"Press R to restart",
+		window->GetSize(),
+		Color(0.9f, 0.8f, 0.1f)
+	);
+
+	if (alpha >= .0f) {
+		alpha -= 0.005f;
+	}
+
+	window->GetImagesController().DrawImage(
+		win ? "won" : "fail", 
+		Coord(750, 110), Size(500, 600), 
+		window->GetSize(), 
+		Color(1.0f, 1.0f, 1.0f, alpha)
+	);
+}
+
+void GameField::Restart()
+{
+	alpha = 1.0f;
+	gameOver = win = false;
+
+	explosion.Restart();
+	GenerateField();
 }
 
 GameField::GameField()
@@ -175,25 +227,27 @@ GameField::GameField(Window& window, int row, int col, int mines)
 
 	this->window = &window;
 
-	GenerateField();
+	explosion = SpriteAnimation("explosion", "animations/explosion1", 30, &window, {
+		FrameSound(
+			1,
+			Audio("explosion", "sounds/explosion.wav")
+		)
+	});
+
+	Restart();
 }
 
 void GameField::Draw()
 {
 	KeyboardKey keyboardKey = window->GetKeyboard().GetKey();
 
-	if (IsOver()) {
-		char* str = (char*)(win ? "Win! :)" : "Lose :(");
-		DrawSymbols(
-			Coord(800, 100), 
-			str, 
-			window->GetSize(), 
-			win 
-				? Color(0, 1, 0) 
-				: Color(1, 0, 0)
-		);
+	if (IsOver() && keyboardKey.pressed && keyboardKey.key == GLFW_KEY_R) {
+		Restart();
 	}
 
+	if (IsOver()) {
+		End();
+	}
 
 	for (int i = 0; i < row; i++)
 	{
@@ -209,6 +263,14 @@ void GameField::Draw()
 			//Установка флага
 			if (isMouseOverlap && !revealed && keyboardKey.pressed && keyboardKey.key == GLFW_KEY_F) {
 				element.second.marker = !element.second.marker;
+
+				WindowPointer<AudioController>* audioController = WindowPointerController::GetValue<AudioController>(window->GetWindow(), "audioController");
+
+				audioController->GetValue().Play(
+					element.second.marker 
+					? "set_flag" 
+					: "reset_flag"
+				);
 			}
 
 			//Клик по ячейке
@@ -227,12 +289,14 @@ void GameField::Draw()
 					win = false;
 					gameOver = true;
 					window->GetImagesController().DrawImage(
-						"mine", 
-						Coord(newX, newY), 
-						Size(35, 35), 
-						window->GetSize(), 
+						"mine",
+						Coord(newX, newY),
+						Size(35, 35),
+						window->GetSize(),
 						Color(1, 0, 0)
 					);
+
+					explosion.Play(Coord(newX - 10, newY - 10), Size(50, 50));
 					continue;
 				}
 
