@@ -1,4 +1,5 @@
 #pragma once
+
 #include <GLFW/glfw3.h>
 #include <corecrt_math_defines.h>
 #include <cmath>
