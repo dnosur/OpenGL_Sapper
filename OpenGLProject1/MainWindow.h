@@ -1,8 +1,9 @@
 #pragma once
 #include "Window.h"
-#include "Rect.h"
 
-#include "Audio.h"
+#include "Rect.h"
+#include "Triangle.h"
+#include "Circle.h"
 
 class MainWindow :
     public Window
