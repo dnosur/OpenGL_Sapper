@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Coord.cpp" />
     <ClCompile Include="Figures.cpp" />
@@ -156,11 +157,13 @@
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Circle.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Coord.h" />
     <ClInclude Include="Figures.h" />
@@ -175,18 +178,23 @@
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Size.h" />
     <ClInclude Include="AudioController.h" />
     <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowPointer.h" />
     <ClInclude Include="WindowPointerController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenGLProject1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
