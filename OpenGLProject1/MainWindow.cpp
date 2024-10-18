@@ -35,6 +35,25 @@ void MainWindow::Update()
 {
     GameField gameField(*this, 20, 20, 35);
 
+    Triangle triangle("Sample triangle", *this, Coord(800, 100), Size(100, 100), Color(1.0f, 0.0f, 0.0f));
+    triangle.HookMouseHover([](IFigure* figure, GLFWwindow* window) {
+        std::cout << "Mouse triangle hover: " << figure->GetTitle() << std::endl;
+    });
+
+    triangle.HookMouseClick([](IFigure* figure, GLFWwindow* window) {
+            std::cout << "Mouse triangle click: " << figure->GetTitle() << std::endl;
+    });
+
+    Circle circle("Sample circle", *this, Coord(800, 300), 30, 60, Color(0.3f, 1.0f, 0.6f));
+
+    circle.HookMouseHover([](IFigure* figure, GLFWwindow* window) {
+		std::cout << "Mouse cyrcle hover: " << figure->GetTitle() << std::endl;
+    });
+
+    circle.HookMouseClick([](IFigure* figure, GLFWwindow* window) {
+        std::cout << "Mouse cyrcle click: " << figure->GetTitle() << std::endl;
+    });
+
     while (!glfwWindowShouldClose(GetWindow()) && !IsClosed())
     {
         FillBackground();
@@ -51,9 +70,18 @@ void MainWindow::Update()
             Color(0.4f, 0.4f, 0.4f)
         );
 
-        //PlayExplosionAnimation(Coord(100, 100), animation, 10);
-
         gameField.Draw();
+
+        //Triangle
+  //      triangle.Draw();
+  //      triangle.MouseHover(mouse);
+  //      triangle.MouseClick(mouse);
+
+  //      //Circle
+  //      circle.Draw();
+  //      circle.MouseHover(mouse);
+		//circle.MouseClick(mouse);
+
         mouse.Update();
         keyboard.Update();
 
