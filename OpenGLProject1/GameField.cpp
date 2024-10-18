@@ -23,18 +23,18 @@ void GameField::GenerateField()
 			field[i][j].first.HookMouseHover([](IFigure* figure, GLFWwindow* window) {
 				WindowPointer<Cell<char>>* cell = WindowPointerController::GetValue<Cell<char>>(window, figure->GetTitle());
 				if (cell->GetValue().revealed && cell->GetValue().value == '*') {
-					figure->SetColor(Color(1, 0, 0, 0));
+					figure->SetColor(Color(1, 0, 0));
 					return;
 				}
 
-				figure->SetColor(Color(0, 1, 0, 0));
+				figure->SetColor(Color(0, 1, 0));
 				//std::cout << figure->GetTitle() << " Mouse Hover!\n";
 			});
 
 			field[i][j].first.HookMouseOver([](IFigure* figure, GLFWwindow* window) {
 				WindowPointer<Cell<char>>* cell = WindowPointerController::GetValue<Cell<char>>(window, figure->GetTitle());
 				if (cell->GetValue().revealed && cell->GetValue().value == '*') {
-					figure->SetColor(Color(1, 0, 0, 0));
+					figure->SetColor(Color(1, 0, 0));
 					return;
 				}
 
