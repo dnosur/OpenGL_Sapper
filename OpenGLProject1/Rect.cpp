@@ -70,7 +70,7 @@ void Rect::Draw()
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glBegin(GL_QUADS);
-    glColor3f(color.r, color.g, color.b);
+    glColor4f(color.r, color.g, color.b, color.a);
     glVertex2f(vertex1.X, vertex1.Y);
     glVertex2f(vertex2.X, vertex1.Y);
     glVertex2f(vertex2.X, vertex2.Y);
@@ -140,7 +140,7 @@ Color Rect::GetBaseColor()
 
 std::vector<Coord> Rect::GetVertices()
 {
-    return std::vector<Coord>();
+    return { vertex1, vertex2 };
 }
 
 const char* Rect::GetTitle()

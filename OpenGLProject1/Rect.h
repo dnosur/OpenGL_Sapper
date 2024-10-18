@@ -1,5 +1,6 @@
 #pragma once
 #include "IFigure.h"
+
 class Rect :
     public IFigure
 {
