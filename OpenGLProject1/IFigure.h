@@ -1,3 +1,4 @@
+#pragma once
 #include "Mouse.h"
 #include "Window.h"
 
