@@ -21,6 +21,8 @@ class Rect :
     Color color;
     Color baseColor;
 
+    Shader* shader;
+
     char* title;
 
     bool MouseInRect(Mouse& mouse);
@@ -45,6 +47,10 @@ public:
     Color GetBaseColor();
 
     std::vector<Coord> GetVertices();
+
+    void SetShader(Shader* shader);
+
+    Shader* GetShader();
 
     const char* GetTitle();
 

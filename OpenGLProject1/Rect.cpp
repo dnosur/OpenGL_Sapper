@@ -143,6 +143,24 @@ std::vector<Coord> Rect::GetVertices()
     return { vertex1, vertex2 };
 }
 
+void Rect::SetShader(Shader* shader)
+{
+    if (this->shader == nullptr) {
+        delete this->shader;
+    }
+
+    if (shader == nullptr) {
+        return;
+    }
+
+	this->shader = shader;
+}
+
+Shader* Rect::GetShader()
+{
+    return shader;
+}
+
 const char* Rect::GetTitle()
 {
     return title;
