@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/glut.h>
+
 #include <iostream>
 #include <string>
 
@@ -8,6 +8,7 @@
 
 #include "SpriteAnimation.h"
 #include "AudioController.h"
+#include "WindowPointerController.h"
 
 #include "functions.h"
 

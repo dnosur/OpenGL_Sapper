@@ -1,5 +1,4 @@
 #include "GameField.h"
-#include "WindowPointerController.h"
 
 void GameField::GenerateField()
 {
@@ -192,7 +191,7 @@ void GameField::End()
 
 	window->GetImagesController().DrawImage(
 		win ? "won" : "fail", 
-		Coord(750, 110), Size(500, 600), 
+		Coord(720, 110), Size(500, 600), 
 		window->GetSize(), 
 		Color(1.0f, 1.0f, 1.0f, alpha)
 	);
@@ -282,7 +281,7 @@ void GameField::Draw()
 
 			if (revealed) {
 				const int newX = element.first.GetPos().X - 18;
-				const int newY = element.first.GetPos().Y - 20;
+				const int newY = element.first.GetPos().Y + 20;
 
 				//Нажали на мину
 				if (element.second.value == '*') {
@@ -293,7 +292,8 @@ void GameField::Draw()
 						Coord(newX, newY),
 						Size(35, 35),
 						window->GetSize(),
-						Color(1, 0, 0)
+						Color(1, 0, 0),
+						true
 					);
 
 					explosion.Play(Coord(newX - 10, newY - 10), Size(50, 50));
@@ -305,7 +305,9 @@ void GameField::Draw()
 						"hole", 
 						Coord(newX, newY),
 						Size(35, 35),
-						window->GetSize()
+						window->GetSize(),
+						Color(1, 1, 1),
+						true
 					);
 					continue;
 				}
@@ -325,14 +327,16 @@ void GameField::Draw()
 			//Вывод открытых ячеек
 			if (gameOver) {
 				const int newX = element.first.GetPos().X - 18;
-				const int newY = element.first.GetPos().Y - 20;
+				const int newY = element.first.GetPos().Y + 20;
 
 				if (element.second.value == '*') {
 					window->GetImagesController().DrawImage(
 						"mine", 
 						Coord(newX, newY), 
 						Size(35, 35),
-						window->GetSize()
+						window->GetSize(),
+						Color(1, 1, 1),
+						true
 					);
 					continue;
 				}
@@ -343,7 +347,8 @@ void GameField::Draw()
 						Coord(newX, newY), 
 						Size(35, 35), 
 						window->GetSize(),
-						Color(0.8f, 0.3f, 0.1f)
+						Color(0.8f, 0.3f, 0.1f),
+						true
 					);
 					continue;
 				}
@@ -364,13 +369,15 @@ void GameField::Draw()
 
 			if (element.second.marker) {
 				const int newX = element.first.GetPos().X - 15;
-				const int newY = element.first.GetPos().Y - 40;
+				const int newY = element.first.GetPos().Y;
 
 				window->GetImagesController().DrawImage(
 					"redFlag", 
 					Coord(newX, newY), 
 					Size(50, 50),
-					window->GetSize()
+					window->GetSize(),
+					Color(1, 1, 1),
+					true
 				);
 				continue;
 			}
