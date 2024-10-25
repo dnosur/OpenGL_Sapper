@@ -1,9 +1,5 @@
 #pragma once
-#include <GLFW/glfw3.h>
-
 #include "KeyboardKey.h"
-
-#include "WindowPointerController.h"
 
 class Keyboard
 {
