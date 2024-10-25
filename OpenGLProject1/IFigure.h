@@ -1,8 +1,5 @@
 #pragma once
-#include "Mouse.h"
 #include "Window.h"
-
-#include <vector>
 
 __interface IFigure;
 
@@ -25,6 +22,10 @@ __interface IFigure
 	Color GetBaseColor();
 
 	Size GetSize();
+
+	void SetShader(Shader* shader);
+
+	Shader* GetShader();
 
 	const char* GetTitle();
 
