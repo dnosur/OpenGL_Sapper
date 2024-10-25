@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GL_GLEXT_PROTOTYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Programming\C++\OpenGLProject1\include;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;D:\Programming\C++\OpenGLProject1\vcpkg_installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -143,6 +143,7 @@
     <ClCompile Include="FrameSoundsController.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="GameField.cpp" />
+    <ClCompile Include="glad\glad.c" />
     <ClCompile Include="IFigure.h" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImagesController.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Size.cpp" />
     <ClCompile Include="AudioController.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
@@ -179,6 +181,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Size.h" />
     <ClInclude Include="AudioController.h" />
     <ClInclude Include="SoundSystem.h" />
@@ -192,6 +195,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
+    <None Include="shaders\Image\imageFragment.frag" />
+    <None Include="shaders\Image\imageVertex.vs" />
+    <None Include="shaders\Triangle\fragment.frag" />
+    <None Include="shaders\Triangle\vertex.vs" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGLProject1.rc" />
