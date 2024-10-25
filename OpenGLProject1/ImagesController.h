@@ -1,7 +1,7 @@
 #pragma once
-#include <GLFW/glfw3.h>
-#include <gl/GL.h>
-#include <GL//glut.h>
+#define GL_GLEXT_PROTOTYPES
+#include <glad/glad.h>
+#include <GL/freeglut.h>
 #include <vector>
 
 #include "Size.h"
@@ -17,12 +17,14 @@ class ImagesController
 
 	int GetIndexByTitle(char* title);
 	void ChangeIfExist(Image image);
+
+	void Draw(Image& item, Coord& position, Color& color, Size& windowSize, Size& size, bool reverse = false);
 public:
 
-	void Load(const char* path, const char* title);
-	void LoadAndDrawImage(const char* path, const char* title, Coord position, Size size, Size windowSize);
+	void Load(const char* path, const char* title, Shader* shader = nullptr);
+	void LoadAndDrawImage(const char* path, const char* title, Shader* shader, Coord position, Size size, Size windowSize);
 
-	void DrawImage(const char* title, Coord position, Size size, Size windowSize, Color color = Color(1.0f, 1.0f, 1.0f));
+	void DrawImage(const char* title, Coord position, Size size, Size windowSize, Color color = Color(1.0f, 1.0f, 1.0f), bool reverse = false);
 
 	Image GetImageByTitle(const char* title);
 
