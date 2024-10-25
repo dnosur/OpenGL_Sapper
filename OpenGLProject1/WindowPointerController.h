@@ -1,7 +1,9 @@
 #pragma once
-#include "WindowPointer.h"
-
+#define GL_GLEXT_PROTOTYPES
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include "WindowPointer.h"
 #include <vector>
 
 class WindowPointerController
