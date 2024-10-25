@@ -1,4 +1,6 @@
 #pragma once
+#include "WindowPointerController.h"
+
 struct KeyboardKey
 {
 	int key;
