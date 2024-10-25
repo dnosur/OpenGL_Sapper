@@ -22,6 +22,8 @@ class Triangle
     Color color;
     Color baseColor;
 
+    Shader* shader;
+
     char* title;
 
     bool MouseInTriangle(Mouse& mouse);
@@ -48,6 +50,10 @@ public:
     std::vector<Coord> GetVertices();
 
     const char* GetTitle();
+
+    void SetShader(Shader* shader);
+
+    Shader* GetShader();
 
     const bool IsMouseOverlap();
 

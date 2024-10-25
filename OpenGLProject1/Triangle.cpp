@@ -55,6 +55,8 @@ Triangle::Triangle(const char* title, Window& window, Coord pos, Size size, Colo
 
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
+
+   this->shader = new Shader("triangle_sample", "shaders/Triangle/vertex.vs", "shaders/Triangle/fragment.frag");
 }
 
 Triangle::Triangle(const char* title, Window& window, Coord vertex1, Coord vertex2, Coord vertex3, Color color)
@@ -77,18 +79,53 @@ Triangle::Triangle(const char* title, Window& window, Coord vertex1, Coord verte
 
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
+
+    this->shader = new Shader("triangle_sample", "shaders/Triangle/vertex.vs", "shaders/Triangle/fragment.frag");
 }
 
 void Triangle::Draw()
 {
+    glUseProgram(0);
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glBegin(GL_TRIANGLES);
-    glColor4f(color.r, color.g, color.b, color.a);
-    glVertex2f(vertex1.X, vertex1.Y);
-    glVertex2f(vertex2.X, vertex2.Y);
-    glVertex2f(vertex3.X, vertex3.Y);
-    glEnd();
+    float vertices[] = {
+        // positions         // colors
+         vertex1.X, vertex1.Y, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
+         vertex2.X, vertex2.Y, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
+         vertex3.X, vertex3.Y, 0.0f,  0.0f, 0.0f, 1.0f   // top
+    };
+
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(
+        GL_ARRAY_BUFFER, 
+        sizeof(vertices), 
+        vertices, 
+        GL_STATIC_DRAW
+    );
+
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    shader->Use();
+    shader->SetVec3("targetColor", 1.f, .0f, .0f);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO);
+
     glPopAttrib();
+    glUseProgram(0);
 }
 
 Coord Triangle::GetPos()
@@ -160,6 +197,24 @@ std::vector<Coord> Triangle::GetVertices()
 const char* Triangle::GetTitle()
 {
     return title;
+}
+
+void Triangle::SetShader(Shader* shader)
+{
+    if (this->shader == nullptr) {
+	    delete this->shader;
+    }
+
+    if (shader == nullptr) {
+        return;
+    }
+
+    this->shader = shader;
+}
+
+Shader* Triangle::GetShader()
+{
+    return shader;
 }
 
 const bool Triangle::IsMouseOverlap()
