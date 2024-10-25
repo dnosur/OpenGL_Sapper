@@ -1,7 +1,4 @@
 #include "MainWindow.h"
-#include "Figures.h"
-#include "GameField.h"
-#include "WindowPointerController.h"
 
 MainWindow::MainWindow(): Window()
 {
@@ -12,6 +9,11 @@ MainWindow::MainWindow(Size size, const char* title, Color backgroundColor, GLFW
 
 void MainWindow::Initialize()
 {
+    if (!gladLoadGL()) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
+        return;
+    }
+
     images.Load("images/redFlag.png", "redFlag");
     images.Load("images/mine.png", "mine");
     images.Load("images/hole.png", "hole");
@@ -36,6 +38,8 @@ void MainWindow::Update()
     GameField gameField(*this, 20, 20, 35);
 
     Triangle triangle("Sample triangle", *this, Coord(800, 100), Size(100, 100), Color(1.0f, 0.0f, 0.0f));
+    triangle.SetShader(new Shader("triangle_sample", "shaders/Triangle/vertex.vs", "shaders/Triangle/fragment.frag"));
+
     triangle.HookMouseHover([](IFigure* figure, GLFWwindow* window) {
         std::cout << "Mouse triangle hover: " << figure->GetTitle() << std::endl;
     });
@@ -60,27 +64,19 @@ void MainWindow::Update()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);;
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         images.DrawImage(
-            "ground", 
-            Coord(0, 0), 
-            GetSize(), 
-            GetSize(), 
+            "ground",
+            Coord(0, 0),
+            GetSize(),
+            GetSize(),
             Color(0.4f, 0.4f, 0.4f)
         );
 
+
         gameField.Draw();
-
-        //Triangle
-  //      triangle.Draw();
-  //      triangle.MouseHover(mouse);
-  //      triangle.MouseClick(mouse);
-
-  //      //Circle
-  //      circle.Draw();
-  //      circle.MouseHover(mouse);
-		//circle.MouseClick(mouse);
+        //triangle.Draw();
 
         mouse.Update();
         keyboard.Update();

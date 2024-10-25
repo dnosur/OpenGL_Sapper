@@ -5,6 +5,10 @@
 #include "Triangle.h"
 #include "Circle.h"
 
+#include "Figures.h"
+#include "GameField.h"
+#include "WindowPointerController.h"
+
 class MainWindow :
     public Window
 {
