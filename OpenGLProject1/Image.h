@@ -1,7 +1,5 @@
 #pragma once
-#include <GLFW/glfw3.h>
-#include <gl/GL.h>
-#include <iostream>
+#include "Shader.h"
 
 struct Image
 {
@@ -9,9 +7,11 @@ struct Image
 	char* path;
 
 	GLuint image;
+	Shader* shader;
 
 	Image();
-	Image(const char* title, const char* path, GLint image);
+	Image(const char* title, const char* path, GLint image, Shader* shader);
+	~Image();
 
 	bool operator==(const Image& other) const;
 	bool operator!=(const Image& other) const;
