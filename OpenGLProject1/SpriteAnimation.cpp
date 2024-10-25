@@ -149,7 +149,7 @@ void SpriteAnimation::Play(Coord coord, Size size)
 
 	frameSounds.Update(currentSpriteIndex);
 
-	sprites.DrawImage(sprites.GetImages()[currentSpriteIndex].title, coord, size, window->GetSize());
+	sprites.DrawImage(sprites.GetImages()[currentSpriteIndex].title, coord, size, window->GetSize(), Color(1, 1, 1), true);
 	if (currentSpriteIndex >= sprites.GetSize() - 1 && !repeat) {
 		currentSpriteIndex = 0;
 		play = false;
