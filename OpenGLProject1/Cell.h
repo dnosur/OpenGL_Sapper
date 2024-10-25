@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "Coord.h"
 
 template <typename T>
