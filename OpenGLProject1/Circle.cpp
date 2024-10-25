@@ -146,6 +146,24 @@ const char* Circle::GetTitle()
     return title;
 }
 
+void Circle::SetShader(Shader* shader)
+{
+    if (this->shader == nullptr) {
+        delete this->shader;
+    }
+
+    if (shader == nullptr) {
+        return;
+    }
+
+	this->shader = shader;
+}
+
+Shader* Circle::GetShader()
+{
+	return shader;
+}
+
 Window Circle::GetWindow()
 {
     return *window;

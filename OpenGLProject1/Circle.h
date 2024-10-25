@@ -24,6 +24,8 @@ class Circle : public IFigure
     Color color;
     Color baseColor;
 
+    Shader* shader;
+
     char* title;
 
     bool MouseInCircle(Mouse& mouse);
@@ -51,6 +53,10 @@ public:
     Coord GetPos();
 
     const char* GetTitle();
+
+    void SetShader(Shader* shader);
+
+    Shader* GetShader();
 
     Window GetWindow();
 
