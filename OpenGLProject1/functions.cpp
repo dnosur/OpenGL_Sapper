@@ -70,12 +70,20 @@ void DrawSymbols(Coord coord, char* symbols, Size windowSize, const Color color)
 
 void copyStr(char* origin, char*& destination)
 {
+	if (origin == nullptr) {
+		return;
+	}
+
 	destination = new char[strlen(origin) + 1];
 	strcpy_s(destination, strlen(origin) + 1, origin);
 }
 
 void copyStr(const char* origin, char*& destination)
 {
+	if (origin == nullptr) {
+		return;
+	}
+
 	destination = new char[strlen(origin) + 1];
 	strcpy_s(destination, strlen(origin) + 1, origin);
 }

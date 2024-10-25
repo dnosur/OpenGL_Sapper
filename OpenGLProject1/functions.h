@@ -1,5 +1,6 @@
 #pragma once
-#include <GL/glut.h>
+#define GL_GLEXT_PROTOTYPES
+#include <glad/glad.h>
 #include <gl/glut.h>
 
 #include <windows.h>
