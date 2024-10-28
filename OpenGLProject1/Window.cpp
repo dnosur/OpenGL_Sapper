@@ -19,9 +19,20 @@ void Window::FillBackground()
     glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 }
 
+void Window::ResizeWindow(Size size)
+{
+    if (size.width <= 0 || size.height <= 0) {
+        return;
+    }
+
+    glViewport(0, 0, size.width, size.height);
+
+    this->size = size;
+}
+
 Window::Window()
 {
-	size = Size(640, 480);
+	size = Size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
 	title = (char*)"Sample Window";
 
     backgroundColor = Color(255, 255, 255);

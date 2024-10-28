@@ -1,4 +1,7 @@
 #pragma once
+#define DEFAULT_WINDOW_WIDTH 1280
+#define DEFAULT_WINDOW_HEIGHT 720
+
 #include "ImagesController.h"
 #include "AudioController.h"
 
@@ -63,6 +66,8 @@ public:
 	Color GetBackgroundColor();
 
 	ImagesController& GetImagesController();
+
+	void ResizeWindow(Size size);
 
 	Mouse& GetMouse();
 	Keyboard& GetKeyboard();
