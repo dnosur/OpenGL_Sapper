@@ -31,6 +31,14 @@ void MainWindow::Initialize()
     WindowPointerController::SetPointer(window, WindowPointer<Keyboard>("Keyboard", &keyboard));
 
     WindowPointerController::SetPointer(window, WindowPointer<AudioController>("audioController", &audioController));
+
+    WindowPointerController::SetPointer(window, WindowPointer<Window>("MainWindow", this));
+
+
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+       WindowPointerController::GetValue<Window>(window, "MainWindow")->GetValue().ResizeWindow(Size(width, height));
+
+    });
 }
 
 void MainWindow::Update()
