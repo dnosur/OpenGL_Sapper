@@ -12,6 +12,7 @@
 #include "Coord.h"
 #include "Color.h"
 #include "Size.h"
+//#include "Window.h"
 
 void clear();
 void pause();
@@ -27,3 +28,6 @@ void copyStr(const char* origin, char*& destination);
 
 COORD getxy();
 void getxy(int& x, int& y);
+
+Size MathSize(Size size, Size windowSize);
+Coord MathCoord(Coord coord, Size windowSize);

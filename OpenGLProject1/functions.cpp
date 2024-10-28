@@ -97,6 +97,28 @@ void getxy(int& x, int& y) {
 	x = screenBufferInfo.dwCursorPosition.X;
 	y = screenBufferInfo.dwCursorPosition.Y;
 }
+//
+//const int newX = static_cast<int>((float)(element.first.GetPos().X - 15.0f) * (float)(window->GetSize().width / 1280.0f));
+//const int newY = static_cast<int>((float)(element.first.GetPos().Y + .0f) * (float)(window->GetSize().height / 720.0f));
+//
+//const int sizeWidth = static_cast<int>(50.0f * (float)(window->GetSize().width / 1280.0f));
+//const int sizeHeight = static_cast<int>(50.0f * (float)(window->GetSize().height / 720.0f));
+
+Size MathSize(Size size, Size windowSize)
+{
+	return Size(
+		static_cast<int>((float)(size.width * (float)(windowSize.width / 1280.0f))),
+		static_cast<int>((float)(size.height * (float)(windowSize.height / 720.0f)))
+	);
+}
+
+Coord MathCoord(Coord coord, Size windowSize)
+{
+	return Coord(
+			static_cast<int>((float)(coord.X * (float)(windowSize.width / 1280.0f))),
+			static_cast<int>((float)(coord.Y * (float)(windowSize.height / 720.0f)))
+	);
+}
 
 COORD getxy() {
 	CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
