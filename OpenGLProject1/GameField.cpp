@@ -170,7 +170,10 @@ void GameField::End()
 {
 	char* str = (char*)(win ? "Win! :)" : "Lose :(");
 	DrawSymbols(
-		Coord(800, 100),
+		MathCoord(
+			Coord(800, 100),
+			window->GetSize()
+		),
 		str,
 		window->GetSize(),
 		win
@@ -179,7 +182,10 @@ void GameField::End()
 	);
 
 	DrawSymbols(
-		Coord(800, 200),
+		MathCoord(
+			Coord(800, 200),
+			window->GetSize()
+		),
 		(char*)"Press R to restart",
 		window->GetSize(),
 		Color(0.9f, 0.8f, 0.1f)
@@ -191,7 +197,14 @@ void GameField::End()
 
 	window->GetImagesController().DrawImage(
 		win ? "won" : "fail", 
-		Coord(720, 110), Size(500, 600), 
+		MathCoord(
+			Coord(720, 100),
+			window->GetSize()
+		),
+		MathSize(
+			Size(500, 600),
+			window->GetSize()
+		),
 		window->GetSize(), 
 		Color(1.0f, 1.0f, 1.0f, alpha)
 	);
@@ -280,8 +293,8 @@ void GameField::Draw()
 			};
 
 			if (revealed) {
-				const int newX = element.first.GetPos().X - 18;
-				const int newY = element.first.GetPos().Y + 20;
+				const int newX = (element.first.GetPos().X - 18);
+				const int newY = (element.first.GetPos().Y + 20);
 
 				//Нажали на мину
 				if (element.second.value == '*') {
@@ -289,22 +302,43 @@ void GameField::Draw()
 					gameOver = true;
 					window->GetImagesController().DrawImage(
 						"mine",
-						Coord(newX, newY),
-						Size(35, 35),
+						MathCoord(
+							Coord(newX, newY),
+							window->GetSize()
+						),
+						MathSize(
+							Size(35, 35),
+							window->GetSize()
+						),
 						window->GetSize(),
 						Color(1, 0, 0),
 						true
 					);
 
-					explosion.Play(Coord(newX - 10, newY - 10), Size(50, 50));
+					explosion.Play(
+						MathCoord(
+							Coord(newX - 10, newY - 10),
+							window->GetSize()
+						),
+						MathSize(
+							Size(50, 50),
+							window->GetSize()
+						)
+					);
 					continue;
 				}
 
 				if (element.second.value == '.') {
 					window->GetImagesController().DrawImage(
 						"hole", 
-						Coord(newX, newY),
-						Size(35, 35),
+						MathCoord(
+							Coord(newX, newY),
+							window->GetSize()
+						),
+						MathSize(
+							Size(35, 35),
+							window->GetSize()
+						),
 						window->GetSize(),
 						Color(1, 1, 1),
 						true
@@ -313,9 +347,12 @@ void GameField::Draw()
 				}
 
 				DrawSymbol(
-					Coord(
-						element.first.GetPos().X - 3,
-						element.first.GetPos().Y
+					MathCoord(
+						Coord(
+							element.first.GetPos().X - 3, 
+							element.first.GetPos().Y
+						),
+						window->GetSize()
 					),
 					element.second.value,
 					window->GetSize(),
@@ -332,8 +369,14 @@ void GameField::Draw()
 				if (element.second.value == '*') {
 					window->GetImagesController().DrawImage(
 						"mine", 
-						Coord(newX, newY), 
-						Size(35, 35),
+						MathCoord(
+							Coord(newX, newY),
+							window->GetSize()
+						),
+						MathSize(
+							Size(35, 35),
+							window->GetSize()
+						),
 						window->GetSize(),
 						Color(1, 1, 1),
 						true
@@ -344,8 +387,14 @@ void GameField::Draw()
 				if (element.second.value == '.') {
 					window->GetImagesController().DrawImage(
 						"hole", 
-						Coord(newX, newY), 
-						Size(35, 35), 
+						MathCoord(
+							Coord(newX, newY),
+							window->GetSize()
+						),
+						MathSize(
+							Size(35, 35),
+							window->GetSize()
+						),
 						window->GetSize(),
 						Color(0.8f, 0.3f, 0.1f),
 						true
@@ -354,10 +403,13 @@ void GameField::Draw()
 				}
 
 				DrawSymbol(
-					Coord(
-						element.first.GetPos().X - 3, 
-						element.first.GetPos().Y
-					), 
+					MathCoord(
+						Coord(
+							element.first.GetPos().X - 3, 
+							element.first.GetPos().Y
+						),
+						window->GetSize()
+					),
 					element.second.value, 
 					window->GetSize(),
 					Color(217, 219, 65).ConvertToGl()
@@ -368,13 +420,19 @@ void GameField::Draw()
 			element.first.Draw();
 
 			if (element.second.marker) {
-				const int newX = element.first.GetPos().X - 15;
-				const int newY = element.first.GetPos().Y;
-
 				window->GetImagesController().DrawImage(
 					"redFlag", 
-					Coord(newX, newY), 
-					Size(50, 50),
+					MathCoord(
+						Coord(
+							element.first.GetPos().X - 15.0f,
+							element.first.GetPos().Y + .0f
+						),
+						window->GetSize()
+					),
+					MathSize(
+						Size(50, 50),
+						window->GetSize()
+					),
 					window->GetSize(),
 					Color(1, 1, 1),
 					true
