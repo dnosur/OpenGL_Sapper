@@ -1,9 +1,9 @@
 #version 330 core
 layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 color;
+layout (location = 1) in vec4 color;
 
-out vec3 ourColor;
-uniform vec3 targetColor;
+out vec4 ourColor;
+uniform vec4 targetColor;
 uniform int targetIndex;
 
 void main()
