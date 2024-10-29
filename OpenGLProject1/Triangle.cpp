@@ -56,7 +56,7 @@ Triangle::Triangle(const char* title, Window& window, Coord pos, Size size, Colo
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
 
-   this->shader = new Shader("triangle_sample", "shaders/Triangle/vertex.vs", "shaders/Triangle/fragment.frag");
+   this->shader = new Shader(title, "shaders/Figures/vertex.vs", "shaders/Figures/fragment.frag");
 }
 
 Triangle::Triangle(const char* title, Window& window, Coord vertex1, Coord vertex2, Coord vertex3, Color color)
@@ -80,7 +80,7 @@ Triangle::Triangle(const char* title, Window& window, Coord vertex1, Coord verte
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
 
-    this->shader = new Shader("triangle_sample", "shaders/Triangle/vertex.vs", "shaders/Triangle/fragment.frag");
+    this->shader = new Shader(title, "shaders/Figures/vertex.vs", "shaders/Figures/fragment.frag");
 }
 
 void Triangle::Draw()
@@ -89,9 +89,9 @@ void Triangle::Draw()
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     float vertices[] = {
         // positions         // colors
-         vertex1.X, vertex1.Y, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-         vertex2.X, vertex2.Y, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-         vertex3.X, vertex3.Y, 0.0f,  0.0f, 0.0f, 1.0f   // top
+         vertex1.X, vertex1.Y, 0.0f,  color.r, color.g, color.b, color.a,   // bottom right
+         vertex2.X, vertex2.Y, 0.0f,  color.r, color.g, color.b, color.a, // bottom left
+         vertex3.X, vertex3.Y, 0.0f,  color.r, color.g, color.b, color.a, // top
     };
 
     unsigned int VBO, VAO;
@@ -110,16 +110,19 @@ void Triangle::Draw()
     );
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     shader->Use();
-    shader->SetVec3("targetColor", 1.f, .0f, .0f);
+    shader->SetVec4("targetColor", 1.f, .0f, .0f, 1.f);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
@@ -257,6 +260,8 @@ Triangle& Triangle::operator=(const Triangle& other)
 	this->OnMouseHover = other.OnMouseHover;
 	this->OnMouseOver = other.OnMouseOver;
 	this->OnMouseClick = other.OnMouseClick;
+
+    this->shader = shader;
 
 	return *this;
 }
