@@ -13,7 +13,18 @@ void GameField::GenerateField()
 		for (int j = 0; j < col; j++) {
 			std::string title = "Rect" + std::to_string(i) + std::to_string(j);
 			field[i][j] = {
-				Rect(title.c_str(), *window, Coord(35 * (j + 1), 35 * (i + 1)), Size(30, 30)),
+				Rect(
+					title.c_str(), 
+					*window, 
+					MathCoord(
+						Coord(35 * (j + 1), 35 * (i + 1)),
+						window->GetSize()
+					),
+					MathSize(
+						Size(30, 30),
+						window->GetSize()
+					)
+				),
 				Cell<char>(Coord(j, i), '.')
 			};
 
