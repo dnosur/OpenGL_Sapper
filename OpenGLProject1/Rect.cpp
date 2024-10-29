@@ -16,6 +16,8 @@ Rect::Rect()
 
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
+
+    shader = nullptr;
 }
 
 Rect::Rect(const char* title, Window& window, Coord pos, Size size, Color color)
@@ -43,6 +45,8 @@ Rect::Rect(const char* title, Window& window, Coord pos, Size size, Color color)
 
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
+
+    shader = new Shader(title, "shaders/Figures/vertex.vs", "shaders/Figures/fragment.frag");
 }
 
 Rect::Rect(const char* title, Window& window, Coord vertex1, Coord vertex2, Color color)
@@ -64,19 +68,52 @@ Rect::Rect(const char* title, Window& window, Coord vertex1, Coord vertex2, Colo
 
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
+
+    shader = new Shader(title, "shaders/Figures/vertex.vs", "shaders/Figures/fragment.frag");
 }
 
 void Rect::Draw()
 {
+    glUseProgram(0);
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glBegin(GL_QUADS);
-    glColor4f(color.r, color.g, color.b, color.a);
-    glVertex2f(vertex1.X, vertex1.Y);
-    glVertex2f(vertex2.X, vertex1.Y);
-    glVertex2f(vertex2.X, vertex2.Y);
-    glVertex2f(vertex1.X, vertex2.Y);
-    glEnd();
+
+    float vertices[] = {
+        // positions         // colors
+         vertex1.X, vertex1.Y, 0.0f,  color.r, color.g, color.b, color.a,
+         vertex2.X, vertex1.Y, 0.0f,  color.r, color.g, color.b, color.a,
+         vertex2.X, vertex2.Y, 0.0f,  color.r, color.g, color.b, color.a,
+		 vertex1.X, vertex2.Y, 0.0f,  color.r, color.g, color.b, color.a
+    };
+
+    unsigned int VBO, VAO;
+
+    glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// color attribute
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+    shader->Use();
+    shader->SetInt("targetIndex", -1);
+
+	glDrawArrays(GL_QUADS, 0, 4);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
     glPopAttrib();
+    glUseProgram(0);
 }
 
 Coord Rect::GetPos()
@@ -205,6 +242,9 @@ Rect& Rect::operator=(const Rect& other)
 
     this->OnMouseHover = other.OnMouseHover;
     this->OnMouseOver = other.OnMouseOver;
+    this->OnMouseClick = other.OnMouseClick;
+
+    this->shader = other.shader;
 
     copyStr(other.title, this->title);
 
