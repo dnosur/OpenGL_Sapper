@@ -46,7 +46,6 @@ void MainWindow::Update()
     GameField gameField(*this, 20, 20, 35);
 
     Triangle triangle("Sample triangle", *this, Coord(800, 100), Size(100, 100), Color(1.0f, 0.0f, 0.0f));
-    triangle.SetShader(new Shader("triangle_sample", "shaders/Triangle/vertex.vs", "shaders/Triangle/fragment.frag"));
 
     triangle.HookMouseHover([](IFigure* figure, GLFWwindow* window) {
         std::cout << "Mouse triangle hover: " << figure->GetTitle() << std::endl;
@@ -82,9 +81,9 @@ void MainWindow::Update()
             Color(0.4f, 0.4f, 0.4f)
         );
 
-
         gameField.Draw();
-        //triangle.Draw();
+        triangle.Draw();
+        circle.Draw();
 
         mouse.Update();
         keyboard.Update();
