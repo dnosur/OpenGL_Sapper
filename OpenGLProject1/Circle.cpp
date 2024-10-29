@@ -17,14 +17,33 @@ bool Circle::MouseInCircle(Mouse& mouse)
 
 void Circle::MathHeights()
 {
+    if (!vertexes.empty()) {
+        vertexes.clear();
+    }
+
     float centerX = window->PixelToGLX(pos.X);
     float centerY = window->PixelToGLY(pos.Y);
 
-    for (int i = 0; i <= numSegments; i++) {
-        float theta = 2.0f * M_PI * float(i) / float(numSegments); 
+    vertexes.push_back(centerX);
+    vertexes.push_back(centerY);
+    vertexes.push_back(0.0f);
+    vertexes.push_back(color.r);
+    vertexes.push_back(color.g);
+    vertexes.push_back(color.b);
+    vertexes.push_back(color.a);
+
+    for (int i = 0; i <= numSegments; ++i) {
+        float theta = 2.0f * M_PI * float(i) / float(numSegments);
         float x = r * cosf(theta);
         float y = r * sinf(theta);
-        vertexes.push_back(Coord(x + centerX, y + centerY));
+
+        vertexes.push_back(x + centerX);
+        vertexes.push_back(y + centerY);
+        vertexes.push_back(0.0f);
+        vertexes.push_back(color.r);
+        vertexes.push_back(color.g);
+        vertexes.push_back(color.b);
+        vertexes.push_back(color.a);
     }
 }
 
@@ -37,6 +56,8 @@ Circle::Circle()
 
     OnMouseHover = OnMouseOver = nullptr;
     OnMouseClick = nullptr;
+
+    shader = nullptr;
 }
 
 Circle::Circle(const char* title, Window& window, Coord pos, int numSegments, float r, Color color)
@@ -59,20 +80,43 @@ Circle::Circle(const char* title, Window& window, Coord pos, int numSegments, fl
 
 	OnMouseHover = OnMouseOver = nullptr;
 	OnMouseClick = nullptr;
+
+    shader = new Shader(title, "shaders/Figures/vertex.vs", "shaders/Figures/fragment.frag");
 }
 
 void Circle::Draw()
 {
+    glUseProgram(0);
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glBegin(GL_TRIANGLE_FAN);
-    glColor4f(color.r, color.g, color.b, color.a);
 
-	for (const Coord& vertex : vertexes) {
-		glVertex2f(vertex.X, vertex.Y);
-	}
+    unsigned int VAO, VBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
 
-    glEnd();
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glBufferData(GL_ARRAY_BUFFER, vertexes.size() * sizeof(float), vertexes.data(), GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0); // Позиции
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float))); // Цвета
+    glEnableVertexAttribArray(1);
+
+    shader->Use();
+    shader->SetVec4("targetColor", 0, 0, 0, 0);
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 2);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+
     glPopAttrib();
+    glUseProgram(0);
 }
 
 bool Circle::MouseHover(Mouse& mouse)
@@ -187,4 +231,32 @@ void Circle::HookMouseOver(MouseHoverHandler OnMouseOver)
 void Circle::HookMouseClick(MouseClickHandler OnMouseClick)
 {
 	this->OnMouseClick = OnMouseClick;
+}
+
+Circle& Circle::operator=(const Circle& other)
+{
+    if (this == &other) {
+        return *this;
+    }
+
+    baseColor = other.baseColor;
+    color = other.color;
+    numSegments = other.numSegments;
+
+    OnMouseClick = other.OnMouseClick;
+    OnMouseHover = other.OnMouseHover;
+    OnMouseOver = other.OnMouseOver;
+
+    vertexes = other.vertexes;
+
+    r = other.r;
+
+    pos = other.pos;
+    size = other.size;
+
+    copyStr(other.title, title);
+
+    shader = other.shader;
+
+    return *this;
 }

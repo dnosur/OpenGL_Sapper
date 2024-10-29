@@ -13,7 +13,8 @@ class Circle : public IFigure
 
     MouseClickHandler OnMouseClick;
 
-    std::vector<Coord> vertexes;
+    std::vector<float> vertexes;
+
     int numSegments;
     float r;
 
@@ -65,4 +66,6 @@ public:
     void HookMouseHover(MouseHoverHandler OnMouseHover);
     void HookMouseOver(MouseHoverHandler OnMouseOver);
     void HookMouseClick(MouseClickHandler OnMouseClick);
+
+    Circle& operator=(const Circle& other);
 };
