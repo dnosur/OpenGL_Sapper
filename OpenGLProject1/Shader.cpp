@@ -138,6 +138,9 @@ char* Shader::GetFragmentPath()
 
 void Shader::Use()
 {
+    if (this == nullptr || Undefined()) {
+		return glUseProgram(0);
+	}
     glUseProgram(id);
 }
 
